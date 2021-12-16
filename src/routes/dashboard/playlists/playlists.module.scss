@@ -1,0 +1,14 @@
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.item {
+  cursor: pointer;
+  margin-bottom: 10px;
+
+  &:hover {
+    background: #3b3131;
+  }
+}

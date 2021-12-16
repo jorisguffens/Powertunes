@@ -1,0 +1,20 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #191414;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.svg-inline--fa {
+  width: 1em !important;
+  height: 1em;
+}

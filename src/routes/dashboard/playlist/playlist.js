@@ -32,12 +32,14 @@ export default function Playlist() {
 
     return (
         <>
-            <div>
-                <IconButton onClick={() => navigate('/')}>
-                    <i className="fas fa-arrow-left"/>
-                </IconButton>
+            <div className={style.header}>
+                <div className={style.headerActions}>
+                    <IconButton onClick={() => navigate('/')}>
+                        <i className="fas fa-arrow-left"/>
+                    </IconButton>
+                </div>
+                <Typography variant={"h2"}>{playlist.name}</Typography>
             </div>
-            <Typography variant={"h2"}>{playlist.name}</Typography>
             <br/>
             <div>
                 <Button onClick={() => setMagicTool(true)}>
@@ -50,12 +52,12 @@ export default function Playlist() {
                 <Track key={item.track.id} playlistId={id} data={item.track}/>)
             }
 
-            { magicTool && <MagicTool playlist={playlist} handleClose={() => setMagicTool(false)}/>}
+            {magicTool && <MagicTool playlist={playlist} handleClose={() => setMagicTool(false)}/>}
         </>
     )
 }
 
-function Track({ playlistId, data }) {
+function Track({playlistId, data}) {
 
     const [busy, setBusy] = useState(false);
 

@@ -1,4 +1,13 @@
 
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.headerActions {
+  margin-right: 25px;
+}
+
 .item {
   margin-bottom: 5px;
 }

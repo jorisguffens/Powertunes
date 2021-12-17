@@ -1,0 +1,13 @@
+version: '3.5'
+
+services:
+
+  kdc_webeditor:
+    container_name: kdc_webeditor
+    build:
+      context: .
+      args:
+        BYTEBIN: 'https://bytebin.lucko.me'
+    image: kdc_webeditor
+    ports:
+      - 80:80

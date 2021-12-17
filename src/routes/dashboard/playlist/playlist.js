@@ -9,7 +9,7 @@ import {useQueryClient} from "react-query";
 import {useCallback, useState} from "react";
 import clsx from "clsx";
 import {useNavigate} from "react-router";
-import MagicTool from "../../../tools/magicTool/MagicTool";
+import MagicTool from "../../../tools/magicTool/magicTool";
 
 export default function Playlist() {
 

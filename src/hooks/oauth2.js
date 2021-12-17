@@ -22,7 +22,7 @@ function applyToken(response) {
     const access_token = response.data.access_token;
     const refresh_token = response.data.refresh_token;
 
-    localStorage.setItem("access_token", access_token);
+    sessionStorage.setItem("access_token", access_token);
     localStorage.setItem("refresh_token", refresh_token);
     return access_token;
 }
@@ -74,7 +74,7 @@ export function useLogin() {
 export function useLogout() {
     const spotify = useSpotify();
     return () => {
-        localStorage.removeItem("access_token");
+        sessionStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
         spotify.setAccessToken(null);
     };

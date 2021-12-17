@@ -1,0 +1,39 @@
+
+.item {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.albumCover {
+  display: flex;
+  align-items: center;
+  width: 40px;
+  margin-right: 16px;
+  flex-shrink: 0;
+
+  & img {
+    max-width: 100%;
+  }
+}
+
+.info {
+  flex-grow: 1;
+  min-width: 0;
+
+  & > p:first-child {
+    font-size: 18px;
+  }
+
+  & > p:last-child {
+    font-size: 12px;
+  }
+}
+
+.name {
+  height: 27px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

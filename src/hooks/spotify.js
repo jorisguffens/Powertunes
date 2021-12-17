@@ -4,7 +4,8 @@ import {QueryClient, useQuery} from "react-query";
 const qc = new QueryClient({
     defaultOptions: {
         queries: {
-            retry: false
+            retry: false,
+            refetchOnWindowFocus: false
         }
     }
 });

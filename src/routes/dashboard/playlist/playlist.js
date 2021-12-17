@@ -6,17 +6,18 @@ import Typography from "@mui/material/Typography";
 import style from "./playlist.module.scss";
 import Button from "@mui/material/Button";
 import {useQueryClient} from "react-query";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useState} from "react";
 import clsx from "clsx";
-import MagicTool from "../magic/magicTool";
 import {useNavigate} from "react-router";
+import RemixTool from "../../../tools/remixTool/remixTool";
 
 export default function Playlist() {
 
     const {id} = useParams();
     const {data: playlist} = usePlaylist(id);
-    const [magicTool, setMagicTool] = useState(false);
     const navigate = useNavigate();
+
+    const [remixTool, setRemixTool] = useState(false);
 
     if (!playlist) {
         return (
@@ -42,8 +43,8 @@ export default function Playlist() {
             </div>
             <br/>
             <div>
-                <Button onClick={() => setMagicTool(true)}>
-                    Magic Tool
+                <Button onClick={() => setRemixTool(true)}>
+                    Remix Tool
                 </Button>
             </div>
             <Divider/>
@@ -52,7 +53,7 @@ export default function Playlist() {
                 <Track key={item.track.id} playlistId={id} data={item.track}/>)
             }
 
-            {magicTool && <MagicTool playlist={playlist} handleClose={() => setMagicTool(false)}/>}
+            {remixTool && <RemixTool playlist={playlist} handleClose={() => setRemixTool(false)}/>}
         </>
     )
 }

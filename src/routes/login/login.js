@@ -17,7 +17,7 @@ export default function Login() {
                         <Typography variant={"h2"} component={"h3"}>Login</Typography>
                         <br/>
                         <Typography color={"secondary"}>
-                            Login with your spotify account to start managing your playlists.
+                            Login with your spotify account to continue.
                         </Typography>
                         <br/>
                         <Button variant="contained" onClick={login} style={{borderRadius: "50px"}}>

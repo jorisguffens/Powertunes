@@ -1,7 +1,7 @@
 import React from "react";
 
 import Container from "@mui/material/Container";
-import {AppBar, Toolbar} from "@mui/material";
+import {AppBar, IconButton, Toolbar} from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 import {useUser} from "../../hooks/spotify";
@@ -9,10 +9,12 @@ import {useUser} from "../../hooks/spotify";
 import Footer from "../footer/footer";
 
 import style from "./layout.module.scss";
+import {useLogout} from "../../hooks/oauth2";
 
 function Layout({children}) {
 
-    const {data: user} = useUser()
+    const {data: user} = useUser();
+    const logout = useLogout();
 
     return (
         <div className={style.root}>
@@ -26,6 +28,11 @@ function Layout({children}) {
                             <div style={{flexGrow: '1'}}/>
                             <div>
                                 Logged in as {user.display_name}
+                            </div>
+                            <div>
+                                <IconButton onClick={logout} className={style.logoutButton}>
+                                    <i className="fas fa-sign-out-alt"/>
+                                </IconButton>
                             </div>
                         </>
                     )}

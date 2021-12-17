@@ -5,9 +5,7 @@ The playlist tool gives you powerful options that are not included in the Spotif
 ## Features
 
 - [x] Remove songs one by one
-- [x] Replace remixes of songs by the original song
-- [ ] Replace covers of songs by the original song
-- [ ] Replace instrumental versions of songs by the original song
+- [x] Replace remixes, covers, acoustic, instrumental and karaoke by the original song
 - [ ] Improved playlist shuffle
 
 ## Why?

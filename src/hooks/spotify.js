@@ -101,14 +101,12 @@ export default async function findReplacements(playlist, keywords, filter) {
             .filter(i =>
                 i.uri !== item.track.uri &&
                 !i.name.includes("-")
-                // !i.name.toLowerCase().includes("remix") &&
-                // !i.name.toLowerCase().includes("acoustic") &&
-                // !i.name.toLowerCase().includes("cover") &&
-                // !i.name.toLowerCase().includes("instrumental") &&
-                // !i.name.toLowerCase().includes("karaoke")
             );
 
-        if ( name.toLowerCase().includes("remix") ) {
+        const nameLower = name.toLowerCase();
+        if ( nameLower.includes("mix")
+            || nameLower.includes("radio edit")
+            || nameLower.includes("live") ) {
             // check if artists are included
             items = items.filter(i => i.artists.map(a => a.uri).some(a => artists.includes(a)));
         }

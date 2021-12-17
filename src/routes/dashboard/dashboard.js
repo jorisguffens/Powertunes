@@ -27,7 +27,7 @@ export default function Dashboard() {
             logout();
             navigate("/login");
         })
-    }, [error]);
+    }, [error, refresh, logout, navigate, refetch]);
 
     if (isLoading || error) {
         return null;

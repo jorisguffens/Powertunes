@@ -1,6 +1,6 @@
 import {usePlaylists} from "../../../hooks/spotify";
 import Typography from "@mui/material/Typography";
-import {Card, CardContent, IconButton, Skeleton} from "@mui/material";
+import {Card, CardContent, Skeleton} from "@mui/material";
 
 import style from "./playlists.module.scss";
 import {Link} from "react-router-dom";

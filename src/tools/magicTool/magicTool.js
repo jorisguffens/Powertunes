@@ -3,30 +3,31 @@ import Typography from "@mui/material/Typography";
 import SimpleDialog from "../../common/simpleDialog/simpleDialog";
 import ReplacementTool from "../replacementTool/replacementTool";
 import {Checkbox, FormControlLabel, FormGroup} from "@mui/material";
-import Track from "../../common/track/track";
 
 const programs = {
-    "remix": "Remixes",
-    "cover": "Covers",
-    "acoustic": "Acoustic songs",
-    "instrumental": "Instrumental songs",
-    "karaoke": "Karaoke versions"
+    "Remixes": ["remix", "mix"],
+    "Covers": ["cover"],
+    "Acoustic songs": ["acoustic"],
+    "Instrumental songs": ["instrumental"],
+    "Karaoke versions": ["karaoke"],
+    "Live versions": ["live"],
+    "Radio edits": ["radio edit"]
 }
 
 export default function MagicTool({playlist, handleClose}) {
 
     const [accepted, setAccepted] = useState(false);
-    const [keywords, setKeywords] = useState(Object.keys(programs));
+    const [selectedPrograms, setSelectedPrograms] = useState(Object.keys(programs));
 
-    const toggle = useCallback((keyword) => {
-        const index = keywords.indexOf(keyword);
+    const toggle = useCallback((program) => {
+        const index = selectedPrograms.indexOf(program);
         if (index === -1) {
-            keywords.push(keyword);
+            selectedPrograms.push(program);
         } else {
-            keywords.splice(index, 1);
+            selectedPrograms.splice(index, 1);
         }
-        setKeywords([...keywords]);
-    }, []);
+        setSelectedPrograms([...selectedPrograms]);
+    }, [selectedPrograms]);
 
     return (
         <>
@@ -40,13 +41,13 @@ export default function MagicTool({playlist, handleClose}) {
                     <br/>
 
                     <FormGroup>
-                        {Object.keys(programs).map((keyword) => {
+                        {Object.keys(programs).map((program) => {
                             return (
-                                <FormControlLabel key={keyword}
-                                                  label={programs[keyword]}
+                                <FormControlLabel key={program}
+                                                  label={program}
                                                   control={
-                                                      <Checkbox checked={keywords.indexOf(keyword) !== -1}
-                                                                onChange={() => toggle(keyword)}/>
+                                                      <Checkbox checked={selectedPrograms.indexOf(program) !== -1}
+                                                                onChange={() => toggle(program)}/>
                                                   }/>
                             )
                         })}
@@ -54,7 +55,7 @@ export default function MagicTool({playlist, handleClose}) {
                 </SimpleDialog>
             ) : (
                 <ReplacementTool playlist={playlist} handleClose={handleClose}
-                                 title={"Magic Tool"} keyword={keywords}
+                                 title={"Magic Tool"} keyword={selectedPrograms.flatMap(program => programs[program])}
                                  lookingText={"Looking for songs..."}
                                  replacingText={"Replacing songs..."}
                                  emptyText={"No songs (or replacements) found."}

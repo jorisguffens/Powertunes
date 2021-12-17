@@ -25,7 +25,7 @@ export default function ReplacementTool({ playlist, handleClose, title, keyword,
         return () => {
             mounted = false;
         }
-    }, [playlist]);
+    }, [playlist, keyword]);
 
     const toggle = useCallback((uri) => {
         const index = selectedReplacements.indexOf(uri);
@@ -35,7 +35,7 @@ export default function ReplacementTool({ playlist, handleClose, title, keyword,
             selectedReplacements.splice(index, 1);
         }
         setSelectedReplacements([...selectedReplacements]);
-    }, [replacements]);
+    }, [selectedReplacements]);
 
     const submit = useCallback(async () => {
         if (!replacements || busy) return;
@@ -52,9 +52,9 @@ export default function ReplacementTool({ playlist, handleClose, title, keyword,
         await spotify.addTracksToPlaylist(playlist.id, insert);
         handleClose();
         await queryClient.invalidateQueries("playlist-" + playlist.id);
-    }, [replacements, selectedReplacements]);
+    }, [replacements, selectedReplacements, busy, handleClose, playlist, queryClient]);
 
-    let dialogContent = null;
+    let dialogContent;
     if (!replacements) {
         dialogContent = (
             <>

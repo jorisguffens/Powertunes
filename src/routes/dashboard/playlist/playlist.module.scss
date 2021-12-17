@@ -43,6 +43,7 @@
 
 .itemActions {
   text-align: right;
+  flex-grow: 1;
 
   & button {
     font-size: 16px;

@@ -1,15 +1,17 @@
 import {useParams} from "react-router-dom";
-import {usePlaylist, useSpotify} from "../../../hooks/spotify";
+import {queryClient, spotify, usePlaylist, useSpotify} from "../../../hooks/spotify";
 import {Card, CardContent, Divider, IconButton, Skeleton} from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 import style from "./playlist.module.scss";
 import Button from "@mui/material/Button";
 import {useQueryClient} from "react-query";
-import {useCallback, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import clsx from "clsx";
 import {useNavigate} from "react-router";
 import MagicTool from "../../../tools/magicTool/magicTool";
+import Track from "../../../common/track/track";
+import useBottomReached from "../../../hooks/useBottomReached";
 
 export default function Playlist() {
 
@@ -17,7 +19,43 @@ export default function Playlist() {
     const {data: playlist} = usePlaylist(id);
     const navigate = useNavigate();
 
+    // tools
     const [magicTool, setMagicTool] = useState(false);
+
+    // infinite scroll
+    const containerRef = useRef();
+    const isBottomReached = useBottomReached(containerRef);
+    const [isLoadingMore, setLoadingMore] = useState(false);
+
+    const unloadedTrackCount = useMemo(() => {
+        if ( !playlist ) return ;
+        return playlist.tracks.total - playlist.tracks.items.length;
+    }, [playlist]);
+
+    useEffect(() => {
+        if ( !playlist || !isBottomReached || isLoadingMore ) {
+            return;
+        }
+        if ( unloadedTrackCount <= 0 ) {
+            return;
+        }
+
+        setLoadingMore(true);
+
+        const tracks = playlist.tracks.items;
+        spotify.getPlaylistTracks(playlist.id, {
+            offset: tracks.length,
+            limit: 100
+        }).then((result) => {
+            result.items.forEach(item => tracks.push(item));
+            playlist.tracks.items = tracks;
+            queryClient.setQueryData("playlist-" + playlist.id, {...playlist, count: playlist.tracks.items.length});
+        }).finally(() => {
+            setLoadingMore(false);
+        });
+
+        // don't include isLoadingMore, it will trigger another load because the dom has not updated yet so bottom is still reached
+    }, [unloadedTrackCount, isBottomReached, playlist]);
 
     if (!playlist) {
         return (
@@ -29,6 +67,16 @@ export default function Playlist() {
                 <Skeleton variant={"rectangular"} height={40}/>
             </>
         )
+    }
+
+    let fill = [];
+    if ( unloadedTrackCount > 0 ) {
+        for ( let i = 0; i < unloadedTrackCount; i++ ) {
+            fill.push(
+                <Skeleton key={i} height={53} variant={"rectangular"}
+                          style={{marginBottom: "5px", borderRadius: "5px"}}/>
+            )
+        }
     }
 
     return (
@@ -49,16 +97,21 @@ export default function Playlist() {
             </div>
             <Divider/>
             <br/>
-            {playlist.tracks.items.map((item, i) =>
-                <Track key={item.track.id + "" + i} playlistId={id} data={item.track}/>)
-            }
+
+            <div ref={containerRef}>
+                {playlist.tracks.items.map((item, i) =>
+                    <PlaylistTrack key={item.track.id + "" + i} playlistId={id} data={item.track}/>)
+                }
+            </div>
+
+            {fill}
 
             {magicTool && <MagicTool playlist={playlist} handleClose={() => setMagicTool(false)}/>}
         </>
     )
 }
 
-function Track({playlistId, data}) {
+function PlaylistTrack({playlistId, data}) {
 
     const [busy, setBusy] = useState(false);
 
@@ -81,24 +134,13 @@ function Track({playlistId, data}) {
             // TODO show error
             setBusy(false);
         })
-    }, [playlistId, data]);
+    }, [playlistId, data, queryClient, spotify]);
 
-    const image = data.album.images.sort((a, b) => a.height - b.height)[0];
     return (
         <>
             <Card className={style.item}>
                 <CardContent className={style.itemContent}>
-                    <div className={style.itemAlbumCover}>
-                        <img src={image.url} alt={"Album cover of " + data.album.name}/>
-                    </div>
-                    <div className={style.itemTrackInfo}>
-                        <Typography>
-                            {data.name}
-                        </Typography>
-                        <Typography color={'secondary'}>
-                            {data.artists.map((artist) => artist.name).join(", ")}
-                        </Typography>
-                    </div>
+                    <Track data={data}/>
                     <div className={clsx(style.itemActions, busy && style.itemActionsBusy)}>
                         <IconButton onClick={remove}>
                             <i className="fas fa-trash"/>

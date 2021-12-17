@@ -44,7 +44,7 @@ export function useLoginCallback() {
             spotify.setAccessToken(applyToken(res));
             setResult(true);
         })
-    }, []);
+    }, [spotify]);
 
     return result;
 }

@@ -11,7 +11,11 @@ export default function Footer() {
                 <Typography variant="body2" color="textSecondary" align="center">
                     Copyright &copy;&nbsp;
                     {new Date().getFullYear()}&nbsp;
-                    Managify by <a href="https://jorisg.com" target="_blank" style={{textDecoration: "none"}}>Joris Guffens</a>
+                    Spotify playlist tool by&nbsp;
+                    <a href="https://jorisg.com" target="_blank"
+                       style={{textDecoration: "none"}} rel="noreferrer noopener">
+                    Joris Guffens
+                </a>
                 </Typography>
             </Container>
         </div>

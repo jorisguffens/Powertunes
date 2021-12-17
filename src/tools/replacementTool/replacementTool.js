@@ -1,35 +1,13 @@
 import {useQueryClient} from "react-query";
 import {useCallback, useEffect, useState} from "react";
+import findReplacements, {spotify} from "../../hooks/spotify";
 import Typography from "@mui/material/Typography";
-import SimpleDialog from "../../common/simpleDialog/simpleDialog";
-import {spotify} from "../../hooks/spotify";
 import {Checkbox, CircularProgress, FormControlLabel, FormGroup} from "@mui/material";
 import Track from "../../common/track/track";
+import SimpleDialog from "../../common/simpleDialog/simpleDialog";
 
 
-export default function RemixTool({playlist, handleClose}) {
-
-    const [accepted, setAccepted] = useState(false);
-
-    return (
-        <>
-            {!accepted ? (
-                <SimpleDialog title={"Replace remixes"} handleClose={handleClose}
-                              submitText={"Let's go"} handleSubmit={() => setAccepted(true)}>
-
-                    <Typography>
-                        This tool will look for remixed songs in your playlist and try to replace them with the
-                        original version.
-                    </Typography>
-                </SimpleDialog>
-            ) : (
-                <ReplacementDialog playlist={playlist} handleClose={handleClose}/>
-            )}
-        </>
-    )
-}
-
-function ReplacementDialog({playlist, handleClose}) {
+export default function ReplacementTool({ playlist, handleClose, title, keyword, lookingText, replacingText, emptyText }) {
     const queryClient = useQueryClient();
 
     const [busy, setBusy] = useState(false);
@@ -39,7 +17,7 @@ function ReplacementDialog({playlist, handleClose}) {
 
     useEffect(() => {
         let mounted = true;
-        findReplacements(playlist).then((replacements) => {
+        findReplacements(playlist, keyword).then((replacements) => {
             if (!mounted) return;
             setSelectedReplacements(Object.keys(replacements));
             setReplacements(replacements);
@@ -82,7 +60,7 @@ function ReplacementDialog({playlist, handleClose}) {
             <>
                 <br/>
                 <div align={"center"}>
-                    <Typography>Looking for remixes...</Typography>
+                    <Typography>{lookingText}</Typography>
                     <br/>
                     <CircularProgress/>
                 </div>
@@ -93,7 +71,7 @@ function ReplacementDialog({playlist, handleClose}) {
             <>
                 <br/>
                 <div align={"center"}>
-                    <Typography>Replacing remixes...</Typography>
+                    <Typography>{replacingText}</Typography>
                     <br/>
                     <CircularProgress/>
                 </div>
@@ -104,7 +82,7 @@ function ReplacementDialog({playlist, handleClose}) {
             <>
                 <br/>
                 <Typography align={"center"}>
-                    No remixes (or replacements) were found.
+                    {emptyText}
                 </Typography>
             </>
         )
@@ -136,45 +114,9 @@ function ReplacementDialog({playlist, handleClose}) {
     }
 
     return (
-        <SimpleDialog title={"Replace remixes"} handleClose={handleClose}
+        <SimpleDialog title={title} handleClose={handleClose}
                       submitText={"Accept"} handleSubmit={submit}>
             {dialogContent}
         </SimpleDialog>
     )
-}
-
-async function findReplacements(playlist) {
-    const trackItems = playlist.tracks.items;
-    if (trackItems.length < playlist.tracks.total) {
-        console.log("Not all tracks are loaded");
-        return;
-    }
-
-    const replacements = {};
-    for (let i = 0; i < trackItems.length; i++) {
-        const item = trackItems[i];
-        const name = item.track.name;
-        if (!name.toLowerCase().includes("remix")) {
-            continue;
-        }
-
-        const artists = item.track.artists.map(artist => artist.name)
-            .filter(artist => !name.includes(artist));
-        const query = name.split("-")[0].trim() + " " + artists.join(", ");
-        const result = await spotify.searchTracks(query, {
-            limit: 10
-        });
-
-        const items = result.tracks.items.filter(i => i.uri !== item.track.uri && i.name !== item.track.name);
-        if (items.length === 0) {
-            console.log("No replacement found for " + name);
-            continue;
-        }
-
-        replacements[item.track.uri] = {
-            replacement_uri: items[0].uri,
-            remix_track: item.track
-        };
-    }
-    return replacements;
 }

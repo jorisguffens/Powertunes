@@ -9,7 +9,7 @@ import {useQueryClient} from "react-query";
 import {useCallback, useState} from "react";
 import clsx from "clsx";
 import {useNavigate} from "react-router";
-import RemixTool from "../../../tools/remixTool/remixTool";
+import MagicTool from "../../../tools/magicTool/MagicTool";
 
 export default function Playlist() {
 
@@ -17,7 +17,7 @@ export default function Playlist() {
     const {data: playlist} = usePlaylist(id);
     const navigate = useNavigate();
 
-    const [remixTool, setRemixTool] = useState(false);
+    const [magicTool, setMagicTool] = useState(false);
 
     if (!playlist) {
         return (
@@ -43,17 +43,17 @@ export default function Playlist() {
             </div>
             <br/>
             <div>
-                <Button onClick={() => setRemixTool(true)}>
-                    Remix Tool
+                <Button onClick={() => setMagicTool(true)}>
+                    Magic Tool
                 </Button>
             </div>
             <Divider/>
             <br/>
-            {playlist.tracks.items.map(item =>
-                <Track key={item.track.id} playlistId={id} data={item.track}/>)
+            {playlist.tracks.items.map((item, i) =>
+                <Track key={item.track.id + "" + i} playlistId={id} data={item.track}/>)
             }
 
-            {remixTool && <RemixTool playlist={playlist} handleClose={() => setRemixTool(false)}/>}
+            {magicTool && <MagicTool playlist={playlist} handleClose={() => setMagicTool(false)}/>}
         </>
     )
 }

@@ -9,6 +9,9 @@ RUN npm install
 COPY public/ ./public
 COPY src/ ./src
 
+ARG REACT_APP_APP_URI
+ARG REACT_APP_SPOTIFY_CLIENT_ID
+
 ENV GENERATE_SOURCEMAP=false
 ENV SKIP_PREFLIGHT_CHECK=true
 RUN npm run build

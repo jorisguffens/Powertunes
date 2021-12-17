@@ -2,25 +2,26 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.4.1",
-    "@emotion/styled": "^11.3.0",
-    "@mui/material": "^5.0.1",
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@mui/material": "^5.2.4",
     "client-oauth2": "^4.3.3",
     "clsx": "latest",
     "query-string": "^7.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-query": "^3.34.4",
-    "react-router": "^6.1.1",
-    "react-router-dom": "^6.1.1",
+    "react-query": "^3.34.5",
+    "react-router": "^6.2.0",
+    "react-router-dom": "^6.2.0",
     "spotify-web-api-js": "^1.5.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "react-scripts": "^4.0.3",
-    "css-loader": "^6.3.0",
-    "node-sass": "^6.0.1",
-    "style-loader": "^3.3.0"
+    "css-loader": "^6.5.1",
+    "node-sass": "^6.0.0",
+    "style-loader": "^3.3.1",
+    "react-error-overlay": "6.0.9"
   },
   "scripts": {
     "start": "react-scripts start",

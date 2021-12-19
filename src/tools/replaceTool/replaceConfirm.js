@@ -1,6 +1,6 @@
 import {useQueryClient} from "react-query";
 import {useCallback, useEffect, useState} from "react";
-import {fetchAllTracks, findReplacements, spotify} from "../../hooks/spotify";
+import {fetchAllTracks, useSpotify} from "../../hooks/spotify";
 import Typography from "@mui/material/Typography";
 import {Checkbox, CircularProgress, FormControlLabel, FormGroup} from "@mui/material";
 import Track from "../../common/track/track";
@@ -9,7 +9,9 @@ import * as Comlink from "comlink";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import MainWorker from "worker-loader!../../workers/mainWorker";
 
-export default function ReplaceConfirm({ playlist, handleClose, keywords }) {
+export default function ReplaceConfirm({playlist, handleClose, keywords}) {
+
+    const spotify = useSpotify();
     const queryClient = useQueryClient();
 
     const [busy, setBusy] = useState(false);
@@ -35,10 +37,7 @@ export default function ReplaceConfirm({ playlist, handleClose, keywords }) {
         return () => {
             mounted = false;
         }
-        return () => {
-            mounted = false;
-        }
-    }, [playlist, keywords]);
+    }, [spotify, playlist, keywords]);
 
     const toggle = useCallback((uri) => {
         const index = selectedReplacements.indexOf(uri);
@@ -65,7 +64,7 @@ export default function ReplaceConfirm({ playlist, handleClose, keywords }) {
         await spotify.addTracksToPlaylist(playlist.id, insert);
         handleClose();
         await queryClient.invalidateQueries("playlist-" + playlist.id);
-    }, [replacements, selectedReplacements, busy, handleClose, playlist, queryClient]);
+    }, [playlist, queryClient, spotify, replacements, selectedReplacements, busy, handleClose]);
 
     let dialogContent;
     if (!replacements) {

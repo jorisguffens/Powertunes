@@ -8,8 +8,9 @@ The playlist tool gives you powerful options that are not included in the Spotif
 
 - [x] Remove songs one by one
 - [x] Replace remixes, covers, karaoke... by the original song
-- [ ] Improved playlist shuffle
-- [ ] Duplicate remover
+- [x] Improved playlist shuffle
+- [x] Duplicate remover
+- [ ] 
 
 
 ## Why?

@@ -37,7 +37,7 @@ export default function ShuffleTool({playlist, handleClose}) {
 
         setProgress(100);
         await queryClient.invalidateQueries("playlist-" + playlist.id);
-    }, [busy, handleClose, playlist, queryClient, spotify]);
+    }, [busy, handleClose, playlist, queryClient, spotify, progress]);
 
     let dialogContent;
     if ( !busy ) {

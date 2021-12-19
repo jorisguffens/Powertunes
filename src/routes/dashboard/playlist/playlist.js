@@ -1,10 +1,10 @@
 import {useParams} from "react-router-dom";
-import {queryClient, usePlaylist, useSpotify} from "../../../hooks/spotify";
+import {usePlaylist, useSpotify} from "../../../hooks/spotify";
 import {Card, CardContent, Divider, IconButton, Skeleton} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import {useQueryClient} from "react-query";
-import {useCallback, useEffect, useMemo, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import clsx from "clsx";
 import {useNavigate} from "react-router";
 import ReplaceTool from "../../../tools/replaceTool/replaceTool";
@@ -27,41 +27,10 @@ export default function Playlist() {
 
     // infinite scroll
     const spotify = useSpotify();
-    const [visibleItems, setVisibleItems] = useState(50);
+    const queryClient = useQueryClient();
+    const [visibleItems, setVisibleItems] = useState(0);
 
-    useEffect(() => {
-        if (!playlist) {
-            return;
-        }
-
-        showMore();
-    }, [playlist]);
-
-    const loader = useMemo(() => {
-        const array = [];
-        for (let i = 0; i < 5; i++) {
-            array.push(
-                <Skeleton key={i} height={53} variant={"rectangular"}
-                          style={{marginBottom: "5px", borderRadius: "5px"}}/>
-            )
-        }
-        return array;
-    }, []);
-
-    function showMore()  {
-        const items = playlist.tracks.items;
-        const unrenderedItems = items.length - visibleItems;
-        if ( unrenderedItems > 0 ) {
-            setVisibleItems(visibleItems + Math.min(50, unrenderedItems));
-            if ( unrenderedItems > 50 ) {
-                return;
-            }
-        }
-
-        loadMore();
-    }
-
-    function loadMore() {
+    const loadMore = useCallback(() => {
         if ( playlist.tracks.items.length === playlist.tracks.total ) {
             return;
         }
@@ -75,7 +44,45 @@ export default function Playlist() {
             playlist.tracks.items = tracks;
             queryClient.setQueryData("playlist-" + playlist.id, {...playlist, count: playlist.tracks.items.length});
         });
-    }
+    }, [playlist, spotify, queryClient]);
+
+    const showMoreRef = useRef();
+    const showMore = useCallback(() => {
+        const items = playlist.tracks.items;
+        const unrenderedItems = items.length - visibleItems;
+        if ( unrenderedItems > 0 ) {
+            setVisibleItems(visibleItems + Math.min(50, unrenderedItems));
+            if ( unrenderedItems > 50 ) {
+                return;
+            }
+        }
+
+        loadMore();
+    }, [playlist, visibleItems, loadMore]);
+
+    useEffect(() => {
+        showMoreRef.current = showMore;
+    }, [showMoreRef, showMore]);
+
+    useEffect(() => {
+        if (!playlist) {
+            return;
+        }
+
+        // only happens on first load or when more tracks are loaded
+        showMoreRef.current();
+    }, [playlist]);
+
+    const loader = useMemo(() => {
+        const array = [];
+        for (let i = 0; i < 20; i++) {
+            array.push(
+                <Skeleton key={i} height={53} variant={"rectangular"}
+                          style={{marginBottom: "5px", borderRadius: "5px"}}/>
+            )
+        }
+        return array;
+    }, []);
 
     if (!playlist) {
         return (

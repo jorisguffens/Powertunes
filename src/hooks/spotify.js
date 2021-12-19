@@ -1,20 +1,8 @@
 import SpotifyWebApi from "spotify-web-api-js";
-import {QueryClient, useQuery} from "react-query";
-
-const qc = new QueryClient({
-    defaultOptions: {
-        queries: {
-            retry: false,
-            refetchOnWindowFocus: false
-        }
-    }
-});
-export const queryClient = qc;
+import {useQuery, useQueryClient} from "react-query";
 
 const spotifyApi = new SpotifyWebApi();
-spotifyApi.setAccessToken(localStorage.getItem("access_token"));
-
-export const spotify = spotifyApi;
+spotifyApi.setAccessToken(sessionStorage.getItem("access_token"));
 
 export function useSpotify() {
     return spotifyApi;
@@ -22,13 +10,16 @@ export function useSpotify() {
 
 export function useUser() {
     const spotify = useSpotify();
-    return useQuery("user", () => spotify.getMe());
+    return useQuery("me", () => {
+        console.log("run");
+        return spotify.getMe()
+    });
 }
 
 export function usePlaylists() {
     const spotify = useSpotify();
-    const {data: user} = qc.getQueryData("user");
-    return useQuery("playlists", () => spotify.getUserPlaylists(user));
+    const {data: user} = useUser();
+    return useQuery("playlists", () => spotify.getUserPlaylists(user.id));
 }
 
 export function usePlaylist(id) {
@@ -51,7 +42,7 @@ export function fetchAllTracks(playlist) {
     for (let i = trackItems.length; i < playlist.tracks.total; i += 100) {
         const offset = i;
         const limit = 100;
-        promises.push(spotify.getPlaylistTracks(playlist.id, {offset, limit}).then((result) => {
+        promises.push(spotifyApi.getPlaylistTracks(playlist.id, {offset, limit}).then((result) => {
             for (let i = 0; i < result.items.length; i++) {
                 tracks[i + offset] = result.items[i];
             }
@@ -60,7 +51,6 @@ export function fetchAllTracks(playlist) {
 
     return Promise.all(promises).then(() => {
         playlist.tracks.items = tracks;
-        queryClient.setQueryData("playlist-" + playlist.id, {...playlist});
         return tracks;
     });
 }

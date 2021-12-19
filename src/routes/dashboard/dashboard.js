@@ -11,7 +11,7 @@ import {useNavigate} from "react-router";
 
 export default function Dashboard() {
 
-    const {isLoading, error, refetch} = useUser();
+    const {data: user, isLoading, error, refetch} = useUser();
     const logout = useLogout();
     const refresh = useRefresh();
     const navigate = useNavigate();
@@ -22,6 +22,7 @@ export default function Dashboard() {
         }
 
         refresh().then(() => {
+            console.log("refetching");
             return refetch();
         }).catch(() => {
             logout();

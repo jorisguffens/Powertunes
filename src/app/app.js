@@ -1,13 +1,21 @@
 import {BrowserRouter} from "react-router-dom";
-import {QueryClientProvider} from "react-query";
+import {QueryClient, QueryClientProvider} from "react-query";
 
 import {StyledEngineProvider, ThemeProvider} from '@mui/material/styles';
 import {CssBaseline} from "@mui/material";
 
-import {queryClient} from "../hooks/spotify";
-
 import theme from "./theme";
 import Router from "./router";
+
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            retry: false,
+            refetchOnWindowFocus: false,
+            staleTime: 1000 * 60 * 5
+        }
+    }
+});
 
 export default function App() {
     return (

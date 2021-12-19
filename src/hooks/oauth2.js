@@ -2,7 +2,8 @@ import ClientOAuth2 from "client-oauth2";
 import {useEffect, useState} from "react";
 import {v4 as uuidv4} from 'uuid';
 import crypto from 'crypto';
-import {queryClient, useSpotify} from "./spotify";
+import {useSpotify} from "./spotify";
+import {useQueryClient} from "react-query";
 
 const authClient = new ClientOAuth2({
     clientId: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
@@ -75,11 +76,12 @@ export function useLogin() {
 
 export function useLogout() {
     const spotify = useSpotify();
+    const queryClient = useQueryClient();
     return () => {
         sessionStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
         spotify.setAccessToken(null);
-        queryClient.invalidateQueries("user");
+        queryClient.invalidateQueries("me");
     };
 }
 

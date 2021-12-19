@@ -13,7 +13,7 @@ export default function DuplicateTool({playlist, handleClose}) {
     return (
         <>
             {!accepted ? (
-                <SimpleDialog title={"Magic Tool"} handleClose={handleClose}
+                <SimpleDialog title={"Duplicate Tool"} handleClose={handleClose}
                               submitText={"Let's go"} handleSubmit={() => setAccepted(true)}>
 
                     <Typography>

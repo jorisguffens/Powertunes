@@ -13,6 +13,7 @@ import ReplaceTool from "../../../tools/replaceTool/replaceTool";
 import Track from "../../../common/track/track";
 import useBottomReached from "../../../hooks/useBottomReached";
 import DuplicateTool from "../../../tools/duplicateTool/duplicateTool";
+import ShuffleTool from "../../../tools/shuffleTool/shuffleTool";
 
 export default function Playlist() {
 
@@ -95,10 +96,13 @@ export default function Playlist() {
             <br/>
             <div className={style.toolButtons}>
                 <Button onClick={() => setReplaceTool(true)}>
-                    Replace tool
+                    Replace Tool
                 </Button>
                 <Button onClick={() => setDuplicateTool(true)}>
-                    Duplicate tool
+                    Duplicate Tool
+                </Button>
+                <Button onClick={() => setShuffleTool(true)}>
+                    Shuffle Tool
                 </Button>
             </div>
             <Divider/>
@@ -114,6 +118,7 @@ export default function Playlist() {
 
             {replaceTool && <ReplaceTool playlist={playlist} handleClose={() => setReplaceTool(false)}/>}
             {duplicateTool && <DuplicateTool playlist={playlist} handleClose={() => setDuplicateTool(false)}/>}
+            {shuffleTool && <ShuffleTool playlist={playlist} handleClose={() => setShuffleTool(false)}/>}
         </>
     )
 }

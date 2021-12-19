@@ -170,3 +170,40 @@ export async function findDuplicates(playlist) {
 
     return duplicates;
 }
+
+function cryptoRandomShuffle(array) {
+    const rndbytes = new Uint8Array(100);
+    let j, r=100, tmp, mask=0x3f;
+
+    for ( let i = array.length - 1; i > 0; i--) {
+        if ( (i & (i+1)) === 0 ) mask >>= 1;
+        do {
+            if (r === 100) {
+                crypto.getRandomValues(rndbytes);
+                r = 0;
+            }
+            j = rndbytes[r++] & mask;
+        } while (j > i);
+
+        tmp = array[i];
+        array[i] = array[j];
+        array[j] = tmp;
+    }
+}
+
+export async function cryptoShuffle(playlist) {
+    let trackItems = playlist.tracks.items;
+    if (trackItems.length < playlist.tracks.total) {
+        console.log("Not all tracks are loaded");
+        trackItems = await fetchAllTracks(playlist);
+    }
+
+    cryptoRandomShuffle(trackItems);
+
+    for ( let offset = 0; offset < trackItems.length; offset+=100 ) {
+        const length = Math.min(100, trackItems.length - offset)
+        const uris = trackItems.slice(offset, offset + length).map(i => i.track.uri);
+        await spotify.removeTracksFromPlaylist(playlist.id, uris);
+        await spotify.addTracksToPlaylist(playlist.id, uris);
+    }
+}

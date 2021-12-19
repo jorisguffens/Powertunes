@@ -49,7 +49,7 @@ function Playlist({data}) {
                         <Typography variant={"h5"} component={"h3"}>
                             {data.name}
                         </Typography>
-                        <Typography color={"secondary"}>
+                        <Typography style={{color: "#bbb"}}>
                             {data.description}
                         </Typography>
                     </div>

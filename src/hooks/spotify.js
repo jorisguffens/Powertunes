@@ -1,5 +1,5 @@
 import SpotifyWebApi from "spotify-web-api-js";
-import {useQuery, useQueryClient} from "react-query";
+import {useQuery} from "react-query";
 
 const spotifyApi = new SpotifyWebApi();
 spotifyApi.setAccessToken(sessionStorage.getItem("access_token"));
@@ -10,10 +10,7 @@ export function useSpotify() {
 
 export function useUser() {
     const spotify = useSpotify();
-    return useQuery("me", () => {
-        console.log("run");
-        return spotify.getMe()
-    });
+    return useQuery("me", () => spotify.getMe());
 }
 
 export function usePlaylists() {

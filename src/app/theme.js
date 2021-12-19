@@ -10,9 +10,6 @@ export default createTheme({
         background: {
             default: "#191414",
             paper: "#191414"
-        },
-        text: {
-            secondary: "#aaa"
         }
     },
     // components: {

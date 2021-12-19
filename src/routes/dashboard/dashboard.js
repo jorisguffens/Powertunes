@@ -11,7 +11,7 @@ import {useNavigate} from "react-router";
 
 export default function Dashboard() {
 
-    const {data: user, isLoading, error, refetch} = useUser();
+    const {isLoading, error, refetch} = useUser();
     const logout = useLogout();
     const refresh = useRefresh();
     const navigate = useNavigate();

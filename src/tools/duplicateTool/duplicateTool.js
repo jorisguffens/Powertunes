@@ -21,6 +21,8 @@ export default function DuplicateTool({playlist, handleClose}) {
 
                     <Typography>
                         This tool will look for duplicated songs and remove the duplicates.
+                        <br/><br/>
+                        After running this tool, the fixed songs will appear at the end of the playlist.
                     </Typography>
                     <br/>
                 </SimpleDialog>
@@ -125,7 +127,7 @@ function DuplicateFinder({playlist, handleClose}) {
 
     return (
         <SimpleDialog title={"Duplicate Tool"} handleClose={handleClose}
-                      submitText={"Let's go"} handleSubmit={submit}>
+                      submitText={"Accept"} handleSubmit={submit}>
             {dialogContent}
         </SimpleDialog>
     )

@@ -16,7 +16,7 @@ export default function Track({data}) {
                 <Typography className={style.name}>
                     {data.name}
                 </Typography>
-                <Typography color={'secondary'}>
+                <Typography className={style.artist}>
                     {data.artists.map((artist) => artist.name).join(", ")}
                 </Typography>
             </div>

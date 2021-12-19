@@ -44,7 +44,11 @@ export default function ShuffleTool({playlist, handleClose}) {
         dialogContent = (
             <>
                 <Typography>
-                    This tool will shuffle your playlist with cryptographical randomness.
+                    This tool will shuffle your playlist with the&nbsp;
+                    <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle"
+                       target={"_blank"} rel="noreferrer noopener">
+                        Fisher-Yate Shuffle Algorithm
+                    </a>, which garantees a very good randomness.
                 </Typography>
                 <br/>
             </>

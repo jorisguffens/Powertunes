@@ -9,11 +9,9 @@ export default function Footer() {
         <div className={style.footer}>
             <Container maxWidth="lg">
                 <Typography variant="body2" color="textSecondary" align="center">
-                    Copyright &copy;&nbsp;
-                    {new Date().getFullYear()}&nbsp;
-                    Spotify playlist tool by&nbsp;
+                    Playlist Magic for Spotify, created by&nbsp;
                     <a href="https://jorisg.com" target="_blank"
-                       style={{textDecoration: "none"}} rel="noreferrer noopener">
+                       rel="noreferrer noopener">
                     Joris Guffens
                 </a>
                 </Typography>

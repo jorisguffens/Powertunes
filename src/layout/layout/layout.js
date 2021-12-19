@@ -23,11 +23,11 @@ function Layout({children}) {
                     { user && (
                         <>
                             <Typography component="h1" variant="h5">
-                                Spotify playlist tool
+                                Playlist Magic for Spotify
                             </Typography>
                             <div style={{flexGrow: '1'}}/>
                             <div>
-                                Logged in as {user.display_name}
+                                {user.display_name}
                             </div>
                             <div>
                                 <IconButton onClick={logout} className={style.logoutButton}>

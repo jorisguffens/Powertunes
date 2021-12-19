@@ -1,16 +1,18 @@
-# Playlist tool for Spotify
+# Playlist Magic for Spotify
 
-Check it out at https://spt.scripty.net/
+Check it out at https://playlist-magic.net
 
 The playlist tool gives you powerful options that are not included in the Spotify apps.
 
 ## Features
 
-- [x] Remove songs one by one
 - [x] Replace remixes, covers, karaoke... by the original song
 - [x] Improved playlist shuffle
 - [x] Duplicate remover
-- [ ] 
+- [x] Remove songs one by one
+- [ ] Clone playlists
+- [ ] Merge playlists
+- [ ] Edit playlist information
 
 
 ## Why?

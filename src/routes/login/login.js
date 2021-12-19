@@ -14,14 +14,23 @@ export default function Login() {
             <Container maxWidth={"xs"}>
                 <Card style={{width: "100%"}}>
                     <CardContent>
-                        <Typography variant={"h2"} component={"h3"}>Login</Typography>
+                        <Typography variant={"h3"} component={"h1"}>
+                            Playlist Magic
+                        </Typography>
                         <br/>
-                        <Typography color={"secondary"}>
-                            Login with your spotify account to continue.
+                        <Typography>
+                            This app combines a lot of awesome tools to improve, fix or update your playlists.
+                        </Typography>
+                        <br/>
+                        <Typography>
+                            Login with Spotify to experience the magic.
                         </Typography>
                         <br/>
                         <Button variant="contained" onClick={login} style={{borderRadius: "50px"}}>
-                            <i className="fab fa-spotify"/>&nbsp; Log in
+                            <span style={{fontSize: "21px"}}>
+                                <i className="fab fa-spotify"/>
+                            </span>
+                            &nbsp; Log in with spotify
                         </Button>
                     </CardContent>
                 </Card>

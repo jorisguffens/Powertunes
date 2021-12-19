@@ -8,7 +8,7 @@ const shuffle = async (
     let items = await fetchAllTracks(playlist);
 
     onProgressChange(5);
-    items = arrayShuffle(items);
+    arrayShuffle(items);
 
     onProgressChange(10);
     for (let offset = 0; offset < items.length; offset += 100) {
@@ -21,19 +21,15 @@ const shuffle = async (
 }
 
 function arrayShuffle(array) {
-    let copy = [], n = array.length, i;
+    let m = array.length, t, i;
+    while (m) {
+        i = Math.floor(Math.random() * m--);
 
-    // While there remain elements to shuffle…
-    while (n) {
-
-        // Pick a remaining element…
-        i = Math.floor(Math.random() * n--);
-
-        // And move it to the new array.
-        copy.push(array.splice(i, 1)[0]);
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
     }
-
-    return copy;
+    return array;
 }
 
 export default shuffle;

@@ -56,3 +56,10 @@
     color: #666;
   }
 }
+
+.toolButtons {
+  & button {
+    border-radius: 0;
+    padding: 10px 20px;
+  }
+}

@@ -12,3 +12,13 @@
     background: #3b3131;
   }
 }
+
+.itemContent {
+  padding-bottom: 16px !important;
+  display: flex;
+  align-items: center;
+
+  & img {
+    width: 60px;
+  }
+}

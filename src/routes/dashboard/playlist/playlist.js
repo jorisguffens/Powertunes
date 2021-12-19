@@ -9,9 +9,10 @@ import {useQueryClient} from "react-query";
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import clsx from "clsx";
 import {useNavigate} from "react-router";
-import MagicTool from "../../../tools/magicTool/magicTool";
+import ReplaceTool from "../../../tools/replaceTool/replaceTool";
 import Track from "../../../common/track/track";
 import useBottomReached from "../../../hooks/useBottomReached";
+import DuplicateTool from "../../../tools/duplicateTool/duplicateTool";
 
 export default function Playlist() {
 
@@ -20,7 +21,9 @@ export default function Playlist() {
     const navigate = useNavigate();
 
     // tools
-    const [magicTool, setMagicTool] = useState(false);
+    const [replaceTool, setReplaceTool] = useState(false);
+    const [duplicateTool, setDuplicateTool] = useState(false);
+    const [shuffleTool, setShuffleTool] = useState(false);
 
     // infinite scroll
     const containerRef = useRef();
@@ -90,9 +93,12 @@ export default function Playlist() {
                 <Typography variant={"h2"}>{playlist.name}</Typography>
             </div>
             <br/>
-            <div>
-                <Button onClick={() => setMagicTool(true)}>
-                    Magic Tool
+            <div className={style.toolButtons}>
+                <Button onClick={() => setReplaceTool(true)}>
+                    Replace tool
+                </Button>
+                <Button onClick={() => setDuplicateTool(true)}>
+                    Duplicate tool
                 </Button>
             </div>
             <Divider/>
@@ -106,7 +112,8 @@ export default function Playlist() {
 
             {fill}
 
-            {magicTool && <MagicTool playlist={playlist} handleClose={() => setMagicTool(false)}/>}
+            {replaceTool && <ReplaceTool playlist={playlist} handleClose={() => setReplaceTool(false)}/>}
+            {duplicateTool && <DuplicateTool playlist={playlist} handleClose={() => setDuplicateTool(false)}/>}
         </>
     )
 }

@@ -1,13 +1,12 @@
 import {useQueryClient} from "react-query";
 import {useCallback, useEffect, useState} from "react";
-import findReplacements, {spotify} from "../../hooks/spotify";
+import {findReplacements, spotify} from "../../hooks/spotify";
 import Typography from "@mui/material/Typography";
 import {Checkbox, CircularProgress, FormControlLabel, FormGroup} from "@mui/material";
 import Track from "../../common/track/track";
 import SimpleDialog from "../../common/simpleDialog/simpleDialog";
 
-
-export default function ReplacementTool({ playlist, handleClose, title, keyword, lookingText, replacingText, emptyText }) {
+export default function ReplaceConfirm({ playlist, handleClose, keywords }) {
     const queryClient = useQueryClient();
 
     const [busy, setBusy] = useState(false);
@@ -17,7 +16,7 @@ export default function ReplacementTool({ playlist, handleClose, title, keyword,
 
     useEffect(() => {
         let mounted = true;
-        findReplacements(playlist, keyword).then((replacements) => {
+        findReplacements(playlist, keywords).then((replacements) => {
             if (!mounted) return;
             setSelectedReplacements(Object.keys(replacements));
             setReplacements(replacements);
@@ -25,7 +24,7 @@ export default function ReplacementTool({ playlist, handleClose, title, keyword,
         return () => {
             mounted = false;
         }
-    }, [playlist, keyword]);
+    }, [playlist, keywords]);
 
     const toggle = useCallback((uri) => {
         const index = selectedReplacements.indexOf(uri);
@@ -60,7 +59,7 @@ export default function ReplacementTool({ playlist, handleClose, title, keyword,
             <>
                 <br/>
                 <div align={"center"}>
-                    <Typography>{lookingText}</Typography>
+                    <Typography>Looking for songs...</Typography>
                     <br/>
                     <CircularProgress/>
                 </div>
@@ -71,7 +70,7 @@ export default function ReplacementTool({ playlist, handleClose, title, keyword,
             <>
                 <br/>
                 <div align={"center"}>
-                    <Typography>{replacingText}</Typography>
+                    <Typography>Replacing songs...</Typography>
                     <br/>
                     <CircularProgress/>
                 </div>
@@ -82,7 +81,7 @@ export default function ReplacementTool({ playlist, handleClose, title, keyword,
             <>
                 <br/>
                 <Typography align={"center"}>
-                    {emptyText}
+                    No songs (or replacements) found.
                 </Typography>
             </>
         )
@@ -114,7 +113,7 @@ export default function ReplacementTool({ playlist, handleClose, title, keyword,
     }
 
     return (
-        <SimpleDialog title={title} handleClose={handleClose}
+        <SimpleDialog title={"Replace Tool"} handleClose={handleClose}
                       submitText={"Accept"} handleSubmit={submit}>
             {dialogContent}
         </SimpleDialog>

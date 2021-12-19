@@ -1,7 +1,7 @@
 import {useCallback, useState} from "react";
 import Typography from "@mui/material/Typography";
 import SimpleDialog from "../../common/simpleDialog/simpleDialog";
-import ReplacementTool from "../replacementTool/replacementTool";
+import ReplaceConfirm from "./replaceConfirm";
 import {Checkbox, FormControlLabel, FormGroup} from "@mui/material";
 
 const programs = {
@@ -14,7 +14,7 @@ const programs = {
     "Radio edits": ["radio edit"]
 }
 
-export default function MagicTool({playlist, handleClose}) {
+export default function ReplaceTool({playlist, handleClose}) {
 
     const [accepted, setAccepted] = useState(false);
     const [selectedPrograms, setSelectedPrograms] = useState(Object.keys(programs));
@@ -32,7 +32,7 @@ export default function MagicTool({playlist, handleClose}) {
     return (
         <>
             {!accepted ? (
-                <SimpleDialog title={"Magic Tool"} handleClose={handleClose}
+                <SimpleDialog title={"Replace Tool"} handleClose={handleClose}
                               submitText={"Let's go"} handleSubmit={() => setAccepted(true)}>
 
                     <Typography>
@@ -54,11 +54,8 @@ export default function MagicTool({playlist, handleClose}) {
                     </FormGroup>
                 </SimpleDialog>
             ) : (
-                <ReplacementTool playlist={playlist} handleClose={handleClose}
-                                 title={"Magic Tool"} keyword={selectedPrograms.flatMap(program => programs[program])}
-                                 lookingText={"Looking for songs..."}
-                                 replacingText={"Replacing songs..."}
-                                 emptyText={"No songs (or replacements) found."}
+                <ReplaceConfirm playlist={playlist} handleClose={handleClose}
+                                keywords={selectedPrograms.flatMap(program => programs[program])}
                 />
             )}
         </>

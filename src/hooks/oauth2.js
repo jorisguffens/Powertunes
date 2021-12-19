@@ -43,6 +43,8 @@ export function useLoginCallback() {
         }).then(res => {
             spotify.setAccessToken(applyToken(res));
             setResult(true);
+        }).catch(err => {
+            window.location.href = "/login";
         })
     }, [spotify]);
 

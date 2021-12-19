@@ -1,4 +1,4 @@
-import {usePlaylists} from "../../../hooks/spotify";
+import {usePlaylists, useUser} from "../../../hooks/spotify";
 import Typography from "@mui/material/Typography";
 import {Card, CardContent, Skeleton} from "@mui/material";
 
@@ -8,10 +8,14 @@ import {Link} from "react-router-dom";
 export default function Playlists() {
 
     const {data: playlists} = usePlaylists();
+    const {data: user} = useUser();
 
     let view = [];
     if (playlists) {
         for (let playlist of playlists.items) {
+            if ( playlist.owner.uri !== user.uri && !playlist.collaborative ) {
+                continue;
+            }
             view.push(<Playlist key={playlist.id} data={playlist}/>);
         }
     } else {
@@ -39,17 +43,15 @@ function Playlist({data}) {
     return (
         <Link to={"/playlist/" + data.id} className={style.link}>
             <Card className={style.item}>
-                <CardContent style={{paddingBottom: "16px"}}>
-                    <div style={{display: 'flex', alignItems: 'center'}}>
-                        {image && <img src={image.url} alt=""/>}
-                        <div style={{marginLeft: "20px"}}>
-                            <Typography variant={"h5"} component={"h3"}>
-                                {data.name}
-                            </Typography>
-                            <Typography color={"secondary"}>
-                                {data.description}
-                            </Typography>
-                        </div>
+                <CardContent className={style.itemContent}>
+                    {image && <img src={image.url} alt=""/>}
+                    <div style={{marginLeft: "20px"}}>
+                        <Typography variant={"h5"} component={"h3"}>
+                            {data.name}
+                        </Typography>
+                        <Typography color={"secondary"}>
+                            {data.description}
+                        </Typography>
                     </div>
                 </CardContent>
             </Card>

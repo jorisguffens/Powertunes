@@ -6,7 +6,7 @@ import {CircularProgress, LinearProgress} from "@mui/material";
 import {useQueryClient} from "react-query";
 import * as Comlink from 'comlink';
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import ShuffleWorker from 'worker-loader!./shuffleWorker';
+import MainWorker from 'worker-loader!../../workers/mainWorker';
 
 export default function ShuffleTool({playlist, handleClose}) {
 
@@ -25,9 +25,9 @@ export default function ShuffleTool({playlist, handleClose}) {
             setProgress(val);
         }
 
-        const worker = new ShuffleWorker();
+        const worker = new MainWorker();
         const obj = Comlink.wrap(worker);
-        await obj.execute(
+        await obj.shuffle(
             Comlink.proxy(fetchAllTracks),
             Comlink.proxy(spotify.removeTracksFromPlaylist),
             Comlink.proxy(spotify.addTracksToPlaylist),

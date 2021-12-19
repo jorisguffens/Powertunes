@@ -1,10 +1,13 @@
 import {useCallback, useEffect, useState} from "react";
 import Typography from "@mui/material/Typography";
 import SimpleDialog from "../../common/simpleDialog/simpleDialog";
-import {findDuplicates, useSpotify} from "../../hooks/spotify";
+import {fetchAllTracks, useSpotify} from "../../hooks/spotify";
 import {CircularProgress} from "@mui/material";
 import Track from "../../common/track/track";
 import {useQueryClient} from "react-query";
+import * as Comlink from "comlink";
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import MainWorker from "worker-loader!../../workers/mainWorker";
 
 export default function DuplicateTool({playlist, handleClose}) {
 
@@ -38,8 +41,13 @@ function DuplicateFinder({playlist, handleClose}) {
 
     useEffect(() => {
         let mounted = true;
-        findDuplicates(playlist).then(duplicates => {
-            if ( !mounted ) return;
+        const worker = new MainWorker();
+        const obj = Comlink.wrap(worker);
+        obj.duplicate(
+            Comlink.proxy(fetchAllTracks),
+            playlist
+        ).then(duplicates => {
+            if ( !mounted) return;
             setDuplicates(duplicates);
         })
         return () => {
@@ -77,7 +85,7 @@ function DuplicateFinder({playlist, handleClose}) {
                 </div>
             </>
         );
-    } else if ( busy ) {
+    } else if (busy) {
         dialogContent = (
             <>
                 <br/>
@@ -88,7 +96,7 @@ function DuplicateFinder({playlist, handleClose}) {
                 </div>
             </>
         );
-    } else if ( Object.keys(duplicates).length === 0 ) {
+    } else if (Object.keys(duplicates).length === 0) {
         dialogContent = (
             <>
                 <br/>

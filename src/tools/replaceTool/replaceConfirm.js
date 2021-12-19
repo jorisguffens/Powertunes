@@ -1,10 +1,13 @@
 import {useQueryClient} from "react-query";
 import {useCallback, useEffect, useState} from "react";
-import {findReplacements, spotify} from "../../hooks/spotify";
+import {fetchAllTracks, findReplacements, spotify} from "../../hooks/spotify";
 import Typography from "@mui/material/Typography";
 import {Checkbox, CircularProgress, FormControlLabel, FormGroup} from "@mui/material";
 import Track from "../../common/track/track";
 import SimpleDialog from "../../common/simpleDialog/simpleDialog";
+import * as Comlink from "comlink";
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import MainWorker from "worker-loader!../../workers/mainWorker";
 
 export default function ReplaceConfirm({ playlist, handleClose, keywords }) {
     const queryClient = useQueryClient();
@@ -16,11 +19,22 @@ export default function ReplaceConfirm({ playlist, handleClose, keywords }) {
 
     useEffect(() => {
         let mounted = true;
-        findReplacements(playlist, keywords).then((replacements) => {
+
+        const worker = new MainWorker();
+        const obj = Comlink.wrap(worker);
+        obj.replace(
+            Comlink.proxy(fetchAllTracks),
+            Comlink.proxy((query, options) => spotify.searchTracks(query, options)),
+            playlist,
+            keywords
+        ).then(replacements => {
             if (!mounted) return;
             setSelectedReplacements(Object.keys(replacements));
             setReplacements(replacements);
         })
+        return () => {
+            mounted = false;
+        }
         return () => {
             mounted = false;
         }

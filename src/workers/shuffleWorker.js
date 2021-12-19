@@ -1,6 +1,4 @@
-import * as Comlink from 'comlink';
-
-const execute = async (
+const shuffle = async (
     fetchAllTracks,
     removeTracksFromPlaylist,
     addTracksToPlaylist,
@@ -38,4 +36,4 @@ function arrayShuffle(array) {
     return copy;
 }
 
-Comlink.expose({execute});
+export default shuffle;

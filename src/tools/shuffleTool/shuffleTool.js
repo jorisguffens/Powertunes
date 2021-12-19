@@ -1,24 +1,41 @@
 import {useCallback, useState} from "react";
 import Typography from "@mui/material/Typography";
 import SimpleDialog from "../../common/simpleDialog/simpleDialog";
-import {cryptoShuffle, useSpotify} from "../../hooks/spotify";
-import {CircularProgress} from "@mui/material";
+import {fetchAllTracks, useSpotify} from "../../hooks/spotify";
+import {CircularProgress, LinearProgress} from "@mui/material";
 import {useQueryClient} from "react-query";
+import * as Comlink from 'comlink';
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import ShuffleWorker from 'worker-loader!./shuffleWorker';
 
 export default function ShuffleTool({playlist, handleClose}) {
 
     const spotify = useSpotify();
     const queryClient = useQueryClient();
-    const [busy, setBusy] = useState(false);
 
-    const submit = useCallback(async () => {
+    const [busy, setBusy] = useState(false);
+    const [progress, setProgress] = useState(-1);
+
+    const submit = useCallback(async() => {
+        if ( progress === 100 ) handleClose();
         if ( busy ) return;
         setBusy(true);
 
-        console.log("shuffling...");
-        await cryptoShuffle(playlist);
+        function onProgressChange(val) {
+            setProgress(val);
+        }
 
-        handleClose();
+        const worker = new ShuffleWorker();
+        const obj = Comlink.wrap(worker);
+        await obj.execute(
+            Comlink.proxy(fetchAllTracks),
+            Comlink.proxy(spotify.removeTracksFromPlaylist),
+            Comlink.proxy(spotify.addTracksToPlaylist),
+            Comlink.proxy(onProgressChange),
+            playlist
+        );
+
+        setProgress(100);
         await queryClient.invalidateQueries("playlist-" + playlist.id);
     }, [busy, handleClose, playlist, queryClient, spotify]);
 
@@ -32,6 +49,16 @@ export default function ShuffleTool({playlist, handleClose}) {
                 <br/>
             </>
         )
+    }
+    else if ( progress === 100 ) {
+        dialogContent = (
+            <>
+                <br/>
+                <div align={"center"}>
+                    <Typography>Your playlist has been shuffled!</Typography>
+                </div>
+            </>
+        )
     } else {
         dialogContent = (
             <>
@@ -39,7 +66,11 @@ export default function ShuffleTool({playlist, handleClose}) {
                 <div align={"center"}>
                     <Typography>Shuffling playlist...</Typography>
                     <br/>
-                    <CircularProgress/>
+                    {progress === -1 ? (
+                        <CircularProgress/>
+                    ) : (
+                        <LinearProgress variant="determinate" value={progress}/>
+                    )}
                 </div>
             </>
         )

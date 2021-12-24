@@ -45,7 +45,7 @@ export default function ShuffleTool({playlist, handleClose}) {
 
     if ( finished ) {
         props.submitText = "Ok"
-        props.executingText = "Playlist has been shuffled";
+        props.finishedText = "Playlist has been shuffled";
     } else if (busy) {
         props.submitText = <CircularProgress size={18}/>
         props.executingText = "Shuffling playlist..."

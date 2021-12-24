@@ -56,6 +56,9 @@ function DuplicateFinder({playlist, handleClose}) {
     }, [playlist]);
 
     const handleSubmit = useCallback(async () => {
+        if ( finished ) {
+            handleClose();
+        }
         if (!duplicates || busy) return;
         if (Object.keys(duplicates).length === 0) {
             handleClose();
@@ -82,7 +85,7 @@ function DuplicateFinder({playlist, handleClose}) {
 
     if ( finished ) {
         props.submitText = "Ok"
-        props.executingText = "Duplicates have been removed";
+        props.finishedText = "Duplicates have been removed";
     } else if (!duplicates) {
         props.submitText = <CircularProgress size={18}/>
         props.executingText = "Looking for duplicates..."

@@ -53,20 +53,23 @@ export function useFetchTracks(playlist) {
     return () => fetchAllTracks(spotify, playlist);
 }
 
-function fetchAllTracks(spotify, playlist) {
+export function fetchAllTracks(spotify, playlist) {
     const trackItems = playlist.tracks.items;
-    if (trackItems.length >= playlist.tracks.total) {
+    if ( trackItems && trackItems.length >= playlist.tracks.total) {
         return Promise.resolve(trackItems);
     }
 
     const tracks = new Array(playlist.tracks.total);
-    for (let i = 0; i < trackItems.length; i++) {
-        tracks[i] = trackItems[i];
+    let index = 0;
+    if ( trackItems ) {
+        for (; index < trackItems.length; index++) {
+            tracks[index] = trackItems[index];
+        }
     }
 
     const promises = [];
-    for (let i = trackItems.length; i < playlist.tracks.total; i += 100) {
-        const offset = i;
+    for (; index < playlist.tracks.total; index += 100) {
+        const offset = index;
         const limit = 100;
         promises.push(spotify.getPlaylistTracks(playlist.id, {offset, limit}).then((result) => {
             for (let i = 0; i < result.items.length; i++) {

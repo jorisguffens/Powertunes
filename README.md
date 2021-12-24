@@ -7,12 +7,9 @@ The playlist tool gives you powerful options that are not included in the Spotif
 ## Features
 
 - [x] Replace remixes, covers, karaoke... by the original song
-- [x] Improved playlist shuffle
-- [x] Duplicate remover
-- [x] Remove songs one by one
-- [ ] Clone playlists
-- [ ] Merge playlists
-- [ ] Edit playlist information
+- [x] Full random playlist shuffle
+- [x] Copy one or more playlists into a single new playlist
+- [x] Duplicate finder and remover
 
 
 ## Why?

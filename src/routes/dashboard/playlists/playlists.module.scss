@@ -1,4 +1,12 @@
 
+
+.toolButtons {
+  & button {
+    border-radius: 0;
+    padding: 10px 20px;
+  }
+}
+
 .link {
   text-decoration: none;
   color: inherit;
@@ -19,6 +27,38 @@
   align-items: center;
 
   & img {
-    width: 60px;
+    max-width: 40px;
+    max-height: 40px;
+  }
+}
+
+.itemImage {
+  margin-right: 20px;
+  width: 40px;
+  height: 40px;
+}
+
+.itemInfo {
+  flex-grow: 1;
+  min-width: 0;
+
+  & >:first-child {
+    font-size: 18px;
+  }
+
+  & >:last-child {
+    font-size: 13px;
+    color: #999;
+  }
+}
+
+.itemActions {
+  &:last-child {
+    text-align: right;
+    flex-grow: 1;
+  }
+
+  & button {
+    font-size: 16px;
   }
 }

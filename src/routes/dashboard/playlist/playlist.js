@@ -156,6 +156,7 @@ function PlaylistTrack({playlistId, device, item}) {
 
     const remove = useCallback((e) => {
         e.preventDefault();
+        if ( busy ) return;
         setBusy(true);
 
         spotify.removeTracksFromPlaylist(playlistId, [item.track.uri]).then(() => {

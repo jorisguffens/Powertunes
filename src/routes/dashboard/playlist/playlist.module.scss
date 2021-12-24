@@ -42,8 +42,14 @@
 }
 
 .itemActions {
-  text-align: right;
-  flex-grow: 1;
+  &:first-child {
+    margin-right: 15px;
+  }
+
+  &:last-child {
+    text-align: right;
+    flex-grow: 1;
+  }
 
   & button {
     font-size: 16px;

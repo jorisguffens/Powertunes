@@ -20,6 +20,14 @@ export default function Playlist() {
     const {data: playlist} = usePlaylist(id);
     const navigate = useNavigate();
 
+    const [device, setDevice] = useState(null);
+
+    useEffect(() => {
+        spotify.getMyCurrentPlaybackState().then(state => {
+            setDevice(state.device);
+        })
+    }, []);
+
     // tools
     const [replaceTool, setReplaceTool] = useState(false);
     const [duplicateTool, setDuplicateTool] = useState(false);
@@ -31,7 +39,7 @@ export default function Playlist() {
     const [visibleItems, setVisibleItems] = useState(0);
 
     const loadMore = useCallback(() => {
-        if ( playlist.tracks.items.length === playlist.tracks.total ) {
+        if (playlist.tracks.items.length === playlist.tracks.total) {
             return;
         }
 
@@ -50,9 +58,9 @@ export default function Playlist() {
     const showMore = useCallback(() => {
         const items = playlist.tracks.items;
         const unrenderedItems = items.length - visibleItems;
-        if ( unrenderedItems > 0 ) {
+        if (unrenderedItems > 0) {
             setVisibleItems(visibleItems + Math.min(50, unrenderedItems));
-            if ( unrenderedItems > 50 ) {
+            if (unrenderedItems > 50) {
                 return;
             }
         }
@@ -128,7 +136,7 @@ export default function Playlist() {
                 loader={loader}
             >
                 {playlist.tracks.items.slice(0, visibleItems).map((item, i) =>
-                    <PlaylistTrack key={item.track.id + "" + i} playlistId={id} data={item.track}/>)
+                    <PlaylistTrack key={item.track.id + "" + i} playlistId={id} item={item} device={device}/>)
                 }
             </InfiniteScroll>
 
@@ -139,7 +147,7 @@ export default function Playlist() {
     )
 }
 
-function PlaylistTrack({playlistId, data}) {
+function PlaylistTrack({playlistId, device, item}) {
 
     const [busy, setBusy] = useState(false);
 
@@ -150,10 +158,10 @@ function PlaylistTrack({playlistId, data}) {
         e.preventDefault();
         setBusy(true);
 
-        spotify.removeTracksFromPlaylist(playlistId, [data.uri]).then(() => {
+        spotify.removeTracksFromPlaylist(playlistId, [item.track.uri]).then(() => {
             queryClient.setQueryData("playlist-" + playlistId, (old) => {
                 const items = old.tracks.items;
-                const item = items.filter(i => i.track.uri === data.uri)[0];
+                const item = items.filter(i => i.track.uri === item.track.uri)[0];
                 const index = items.indexOf(item);
                 items.splice(index, 1);
                 return {...old};
@@ -162,15 +170,31 @@ function PlaylistTrack({playlistId, data}) {
             // TODO show error
             setBusy(false);
         })
-    }, [playlistId, data, queryClient, spotify]);
+    }, [playlistId, item]);
+
+    const playback = useCallback((e) => {
+        e.preventDefault();
+
+        spotify.play({
+            device_id: device.id,
+            uris: [item.track.uri]
+        });
+    }, [playlistId, item]);
 
     return (
         <>
             <Card className={style.item}>
                 <CardContent className={style.itemContent}>
-                    <Track data={data}/>
+                    {device && (
+                        <div className={clsx(style.itemActions, busy && style.itemActionsBusy)}>
+                            <IconButton onClick={playback} title={"Play in Spotify"}>
+                                <i className="fas fa-play"/>
+                            </IconButton>
+                        </div>
+                    )}
+                    <Track data={item.track}/>
                     <div className={clsx(style.itemActions, busy && style.itemActionsBusy)}>
-                        <IconButton onClick={remove}>
+                        <IconButton onClick={remove} title={"Remove song from playlist"}>
                             <i className="fas fa-trash"/>
                         </IconButton>
                     </div>

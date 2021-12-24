@@ -28,7 +28,9 @@ const authService = new AuthService({
         'user-library-read',
         'playlist-modify-private',
         'playlist-modify-public',
-        'playlist-read-private'
+        'playlist-read-private',
+        'user-read-playback-state',
+        'user-modify-playback-state'
     ]
 });
 

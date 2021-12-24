@@ -31,15 +31,15 @@ export default function Login() {
                 <Card style={{width: "100%"}}>
                     <CardContent>
                         <Typography variant={"h3"} component={"h1"}>
-                            Playlist Magic
+                            Powertunes
                         </Typography>
                         <br/>
                         <Typography>
-                            This app combines a lot of awesome tools to improve, fix or update your playlists.
+                            This app combines a lot of awesome powertools to improve and update your playlists.
                         </Typography>
                         <br/>
                         <Typography>
-                            Login with Spotify to experience the magic.
+                            Login with Spotify to continue.
                         </Typography>
                         <br/>
                         <Button variant="contained" onClick={() => auth.authService.login()}

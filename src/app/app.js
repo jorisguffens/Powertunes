@@ -24,8 +24,6 @@ const authService = new AuthService({
     authorizeEndpoint: 'https://accounts.spotify.com/authorize',
     redirectUri: process.env.REACT_APP_APP_URI,
     scopes: [
-        'user-library-modify',
-        'user-library-read',
         'playlist-modify-private',
         'playlist-modify-public',
         'playlist-read-private',

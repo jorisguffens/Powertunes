@@ -1,4 +1,4 @@
-import {usePlaylists, useUser} from "../../../hooks/spotify";
+import {usePlaylists, useUser} from "../../../util/spotify";
 import Typography from "@mui/material/Typography";
 import {Card, CardContent, Skeleton} from "@mui/material";
 

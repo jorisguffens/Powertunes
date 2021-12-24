@@ -1,47 +1,56 @@
 import {useCallback, useState} from "react";
-import Typography from "@mui/material/Typography";
-import SimpleDialog from "../../common/simpleDialog/simpleDialog";
-import {fetchAllTracks, useSpotify} from "../../hooks/spotify";
-import {CircularProgress, LinearProgress} from "@mui/material";
 import {useQueryClient} from "react-query";
-import * as Comlink from 'comlink';
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import MainWorker from 'worker-loader!../../workers/mainWorker';
+
+import {CircularProgress, Typography} from "@mui/material";
+
+import {useFetchTracks, useSpotify} from "../../util/spotify";
+import ToolDialog from "../../common/toolDialog/toolDialog";
 
 export default function ShuffleTool({playlist, handleClose}) {
 
     const spotify = useSpotify();
+    const fetchAllTracks = useFetchTracks(playlist);
     const queryClient = useQueryClient();
 
     const [busy, setBusy] = useState(false);
-    const [progress, setProgress] = useState(-1);
+    const [finished, setFinished] = useState(false);
 
-    const submit = useCallback(async() => {
-        if ( progress === 100 ) handleClose();
+    const handleSubmit = useCallback(async() => {
+        if ( finished ) {
+            handleClose();
+        }
         if ( busy ) return;
         setBusy(true);
 
-        function onProgressChange(val) {
-            setProgress(val);
+        const tracks = await fetchAllTracks();
+        arrayShuffle(tracks);
+
+        for (let offset = 0; offset < tracks.length; offset += 100) {
+            const length = Math.min(100, tracks.length - offset)
+            const uris = tracks.slice(offset, offset + length).map(i => i.track.uri);
+            await spotify.removeTracksFromPlaylist(playlist.id, uris);
+            await spotify.addTracksToPlaylist(playlist.id, uris);
         }
 
-        const worker = new MainWorker();
-        const obj = Comlink.wrap(worker);
-        await obj.shuffle(
-            Comlink.proxy(fetchAllTracks),
-            Comlink.proxy(spotify.removeTracksFromPlaylist),
-            Comlink.proxy(spotify.addTracksToPlaylist),
-            Comlink.proxy(onProgressChange),
-            playlist
-        );
-
-        setProgress(100);
+        setFinished(true);
         await queryClient.invalidateQueries("playlist-" + playlist.id);
-    }, [busy, handleClose, playlist, queryClient, spotify, progress]);
+    }, [busy, playlist, finished]);
 
-    let dialogContent;
-    if ( !busy ) {
-        dialogContent = (
+    const props = {
+        title: "Duplicate Tool",
+        submitText: "Let's go",
+        handleClose: handleClose,
+        handleSubmit: handleSubmit
+    }
+
+    if ( finished ) {
+        props.submitText = "Ok"
+        props.executingText = "Playlist has been shuffled";
+    } else if (busy) {
+        props.submitText = <CircularProgress size={18}/>
+        props.executingText = "Shuffling playlist..."
+    } else {
+        props.children = (
             <>
                 <Typography>
                     This tool will shuffle your playlist with the&nbsp;
@@ -54,38 +63,18 @@ export default function ShuffleTool({playlist, handleClose}) {
             </>
         )
     }
-    else if ( progress === 100 ) {
-        dialogContent = (
-            <>
-                <br/>
-                <div align={"center"}>
-                    <Typography>Your playlist has been shuffled!</Typography>
-                </div>
-            </>
-        )
-    } else {
-        dialogContent = (
-            <>
-                <br/>
-                <div align={"center"}>
-                    <Typography>Shuffling playlist...</Typography>
-                    <br/>
-                    {progress === -1 ? (
-                        <CircularProgress/>
-                    ) : (
-                        <LinearProgress variant="determinate" value={progress}/>
-                    )}
-                </div>
-            </>
-        )
-    }
 
-    return (
-        <>
-            <SimpleDialog title={"Shuffle Tool"} handleClose={handleClose}
-                          submitText={"Let's go"} handleSubmit={submit}>
-                {dialogContent}
-            </SimpleDialog>
-        </>
-    )
+    return <ToolDialog {...props}/>
+}
+
+function arrayShuffle(array) {
+    let m = array.length, t, i;
+    while (m) {
+        i = Math.floor(Math.random() * m--);
+
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
+    }
+    return array;
 }

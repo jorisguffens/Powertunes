@@ -14,9 +14,11 @@ export default function SimpleDialog({children, title, handleClose, submitText, 
                 <Button onClick={handleClose}>
                     Cancel
                 </Button>
-                <Button onClick={handleSubmit}>
-                    {submitText}
-                </Button>
+                { handleSubmit && (
+                    <Button onClick={handleSubmit}>
+                        {submitText}
+                    </Button>
+                )}
             </DialogActions>
         </Dialog>
     )

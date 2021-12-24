@@ -1,5 +1,5 @@
 import {useParams} from "react-router-dom";
-import {usePlaylist, useSpotify} from "../../../hooks/spotify";
+import {usePlaylist, useSpotify} from "../../../util/spotify";
 import {Card, CardContent, Divider, IconButton, Skeleton} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";

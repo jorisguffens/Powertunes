@@ -1,13 +1,29 @@
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import {useLogin} from "../../hooks/oauth2";
 import Center from "../../layout/center/center";
 import {Card, CardContent} from "@mui/material";
 import Container from "@mui/material/Container";
+import {useAuth} from "react-oauth2-pkce";
+import {useUser} from "../../util/spotify";
+import {useEffect} from "react";
+import {useNavigate} from "react-router";
 
 export default function Login() {
 
-    const login = useLogin();
+    const auth = useAuth();
+
+    const {data: user, isLoading} = useUser();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if ( user ) {
+            navigate("/");
+        }
+    }, [user, navigate]);
+
+    if ( isLoading ) {
+        return null;
+    }
 
     return (
         <Center text>
@@ -26,7 +42,8 @@ export default function Login() {
                             Login with Spotify to experience the magic.
                         </Typography>
                         <br/>
-                        <Button variant="contained" onClick={login} style={{borderRadius: "50px"}}>
+                        <Button variant="contained" onClick={() => auth.authService.login()}
+                                style={{borderRadius: "50px"}}>
                             <span style={{fontSize: "21px"}}>
                                 <i className="fab fa-spotify"/>
                             </span>

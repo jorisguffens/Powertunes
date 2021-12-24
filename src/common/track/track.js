@@ -8,7 +8,7 @@ export default function Track({data}) {
         return data.album.images.sort((a, b) => a.height - b.height)[0];
     }, [data]);
     return (
-        <div className={style.item}>
+        <div className={style.item} title={data.name}>
             <div className={style.albumCover}>
                 <img src={image.url} alt={"Album cover of " + data.album.name}/>
             </div>

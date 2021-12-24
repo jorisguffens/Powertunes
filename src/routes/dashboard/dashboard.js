@@ -1,36 +1,38 @@
-import {useLogout, useRefresh} from "../../hooks/oauth2";
 import {Route, Routes} from "react-router-dom";
 
 import Layout from "../../layout/layout/layout";
 import Playlists from "./playlists/playlists";
 
-import {useUser} from "../../hooks/spotify";
+import {useUser} from "../../util/spotify";
 import Playlist from "./playlist/playlist";
-import {useEffect} from "react";
 import {useNavigate} from "react-router";
+import {useEffect} from "react";
+import {useAuth} from "react-oauth2-pkce";
 
 export default function Dashboard() {
 
-    const {isLoading, error, refetch} = useUser();
-    const logout = useLogout();
-    const refresh = useRefresh();
+    const auth = useAuth();
+    const { isLoading, error } = useUser();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!error) {
+        if ( auth.authService.isPending() || !auth.authService.isAuthenticated() ) {
             return;
         }
 
-        refresh().then(() => {
-            console.log("refetching");
-            return refetch();
-        }).catch(() => {
-            logout();
-            navigate("/login");
-        })
-    }, [error, refresh, logout, navigate, refetch]);
+        // refresh token after 50 minutes
+        auth.authService.armRefreshTimer(auth.authService.getAuthTokens().refresh_token, 1000 * 60 * 50);
+    }, [auth]);
 
-    if (isLoading || error) {
+    useEffect(() => {
+        if ( !error || auth.authService.isPending() ) {
+            return;
+        }
+
+        navigate("/login");
+    }, [error, auth, navigate]);
+
+    if ( isLoading || error ) {
         return null;
     }
 

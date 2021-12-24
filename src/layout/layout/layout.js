@@ -4,17 +4,17 @@ import Container from "@mui/material/Container";
 import {AppBar, IconButton, Toolbar} from "@mui/material";
 import Typography from "@mui/material/Typography";
 
-import {useUser} from "../../hooks/spotify";
+import {useUser} from "../../util/spotify";
 
 import Footer from "../footer/footer";
 
 import style from "./layout.module.scss";
-import {useLogout} from "../../hooks/oauth2";
+import {useAuth} from "react-oauth2-pkce";
 
 function Layout({children}) {
 
     const {data: user} = useUser();
-    const logout = useLogout();
+    const auth = useAuth();
 
     return (
         <div className={style.root}>
@@ -30,7 +30,7 @@ function Layout({children}) {
                                 {user.display_name}
                             </div>
                             <div>
-                                <IconButton onClick={logout} className={style.logoutButton}>
+                                <IconButton onClick={() => auth.authService.logout()} className={style.logoutButton}>
                                     <i className="fas fa-sign-out-alt"/>
                                 </IconButton>
                             </div>

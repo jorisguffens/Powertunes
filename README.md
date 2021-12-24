@@ -1,8 +1,9 @@
-# Playlist Magic for Spotify
+# Powertunes for Spotify
 
-Check it out at https://playlist-magic.net
+Check it out at https://powertunes.co
 
-The playlist tool gives you powerful options that are not included in the Spotify apps.
+This app is a collection of powertools (aka powertunes), it's a client-side 
+app with handy scripts for updating your Spotify playlists.
 
 ## Features
 
@@ -12,8 +13,9 @@ The playlist tool gives you powerful options that are not included in the Spotif
 - [x] Duplicate finder and remover
 
 
-## Why?
+## Why I created this
 
-When switching music streaming service, I used a tool to move my playlists to Spotify. I noticed that a lot of the 
-songs in the converted playlist were a remixed version, cover, instrumental... instead of the original. That's why
-I created this tool, to fix those issues and do some magic.
+When switching music streaming service, I used an app to move my playlists to Spotify. I noticed that a lot of the 
+songs in the converted playlist were a remixed, cover, instrumental... version instead of the original.
+
+This app is meant to fix those issues and also add some extra handy functionality.

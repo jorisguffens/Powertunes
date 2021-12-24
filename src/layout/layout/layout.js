@@ -23,7 +23,7 @@ function Layout({children}) {
                     { user && (
                         <>
                             <Typography component="h1" variant="h5">
-                                Playlist Magic for Spotify
+                                Powertunes for Spotify
                             </Typography>
                             <div style={{flexGrow: '1'}}/>
                             <div>

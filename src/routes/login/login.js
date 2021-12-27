@@ -43,7 +43,7 @@ export default function Login() {
                         </Typography>
                         <br/>
                         <Button variant="contained" onClick={() => auth.authService.login()}
-                                style={{borderRadius: "50px"}}>
+                                style={{borderRadius: "50px", background: "#1DB954", color: "#fff"}}>
                             <span style={{fontSize: "21px"}}>
                                 <i className="fab fa-spotify"/>
                             </span>

@@ -9,7 +9,7 @@ export default function Footer() {
         <div className={style.footer}>
             <Container maxWidth="lg">
                 <Typography variant="body2" color="textSecondary" align="center">
-                    Powertunes for Spotify, created by&nbsp;
+                    Powertunes for Spotify&reg;, created by&nbsp;
                     <a href="https://jorisg.com" target="_blank"
                        rel="noreferrer noopener">
                     Joris Guffens

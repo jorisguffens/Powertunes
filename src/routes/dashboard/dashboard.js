@@ -20,8 +20,7 @@ export default function Dashboard() {
             return;
         }
 
-        // refresh token after 50 minutes
-        auth.authService.armRefreshTimer(auth.authService.getAuthTokens().refresh_token, 1000 * 60 * 50);
+        auth.authService.startTimer();
     }, [auth]);
 
     useEffect(() => {

@@ -1,13 +1,12 @@
-import {usePlaylists, useSpotify, useUser} from "../../../util/spotify";
+import {usePlaylists, useUser} from "../../../util/spotify";
 import Typography from "@mui/material/Typography";
-import {Card, CardContent, Divider, IconButton, Skeleton} from "@mui/material";
+import {Card, CardContent, Divider, Skeleton} from "@mui/material";
 
 import style from "./playlists.module.scss";
 import {Link} from "react-router-dom";
 import Button from "@mui/material/Button";
-import {useCallback, useState} from "react";
+import {useState} from "react";
 import CopyTool from "../../../tools/copyTool/copyTool";
-import {useQueryClient} from "react-query";
 
 export default function Playlists() {
 
@@ -19,7 +18,7 @@ export default function Playlists() {
     let view = [];
     if (playlists) {
         for (let playlist of playlists.items) {
-            if ( playlist.owner.uri !== user.uri && !playlist.collaborative ) {
+            if (playlist.owner.uri !== user.uri && !playlist.collaborative) {
                 continue;
             }
             view.push(<Playlist key={playlist.id} data={playlist}/>);

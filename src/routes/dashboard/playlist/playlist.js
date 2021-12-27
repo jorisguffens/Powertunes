@@ -112,7 +112,14 @@ export default function Playlist() {
                         <i className="fas fa-arrow-left"/>
                     </IconButton>
                 </div>
-                <Typography variant={"h2"}>{playlist.name}</Typography>
+                <div>
+                    <Typography variant={"h2"}>
+                        Playlist overview
+                    </Typography>
+                    <Typography variant="h5" component="h3" style={{color: "#aaa"}}>
+                        {playlist.name}
+                    </Typography>
+                </div>
             </div>
             <br/>
             <div className={style.toolButtons}>
@@ -156,7 +163,7 @@ function PlaylistTrack({playlistId, device, item}) {
 
     const remove = useCallback((e) => {
         e.preventDefault();
-        if ( busy ) return;
+        if (busy) return;
         setBusy(true);
 
         spotify.removeTracksFromPlaylist(playlistId, [item.track.uri]).then(() => {

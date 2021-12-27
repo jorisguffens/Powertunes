@@ -11,7 +11,21 @@
   }
 }
 
-.logoutButton {
-  font-size: 16px;
+.title {
+  display: flex;
+  align-items: center;
+
+  & a {
+    height: 32px;
+  }
+
+  & img {
+    max-height: 100%;
+    margin-left: 10px;
+  }
+}
+
+.logoutBtnMobile {
+  font-size: 24px;
   margin-left: 15px;
 }

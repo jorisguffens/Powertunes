@@ -24,8 +24,15 @@ export default function Dashboard() {
     }, [auth]);
 
     useEffect(() => {
-        if ( !error || auth.authService.isPending() ) {
+        if ( !error ) {
             return;
+        }
+
+        if ( auth.authService.isPending() ) {
+            const id = setTimeout(() => {
+                navigate("/login");
+            }, 3000);
+            return () => clearTimeout(id);
         }
 
         navigate("/login");

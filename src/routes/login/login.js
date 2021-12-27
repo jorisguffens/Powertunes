@@ -16,12 +16,12 @@ export default function Login() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if ( user ) {
+        if (user) {
             navigate("/");
         }
     }, [user, navigate]);
 
-    if ( isLoading ) {
+    if (isLoading) {
         return null;
     }
 
@@ -35,12 +35,17 @@ export default function Login() {
                         </Typography>
                         <br/>
                         <Typography>
-                            This app combines a lot of awesome powertools to improve and update your playlists.
+                            Update and improve your playlists with these awesome powertools.
                         </Typography>
                         <br/>
-                        <Typography>
-                            Login with Spotify to continue.
-                        </Typography>
+                        <div style={{display: "flex", justifyContent: "center", textAlign: "left"}}>
+                            <ul>
+                                <li>Remove duplicates</li>
+                                <li>Playlist shuffler</li>
+                                <li>Merge and copy playlists</li>
+                                <li>and more...</li>
+                            </ul>
+                        </div>
                         <br/>
                         <Button variant="contained" onClick={() => auth.authService.login()}
                                 style={{borderRadius: "50px", background: "#1DB954", color: "#fff"}}>
